@@ -21,6 +21,7 @@ voting_clf = load_model('voting_clf.pkl')
 xgb_model = load_model('xgb_model.pkl')
 SMOTE_rf_model = load_model('SMOTE_feat_rf_mode.pkl')
 SMOTE_feat_svm_model = load_model('SMOTE_feat_svm_model.pkl')
+hypertune_lgbmc_clf_model = load_model('hypertune_lgbmc_clf.pkl')
 def prepare_input(credit_score, location, gender, age, tenure, balance, 
                   num_products, has_credit_card, is_active_member, estimated_salary, clv, tenure_age_ratio, age_group_middle_age, age_group_senior, age_group_elderly):
     input_dict = {
@@ -59,6 +60,7 @@ def make_predictions(input_df, input_dict):
         'SMOTE XGBoost': smote_xgb_model.predict_proba(input_df)[0][1],
         'SMOTE RF': SMOTE_rf_model.predict_proba(input_df)[0][1],
         'SMOTE SVM': SMOTE_feat_svm_model.predict_proba(input_df)[0][1],
+        # 'Hyper LGBMC': hypertune_lgbmc_clf_model.predict_proba(input_df)[0][1],
         # 'SVM': svm_model.predict_proba(input_df)[0][1],
         # 'Voting Classifier': voting_clf.predict_proba(input_df)[0][1],
         # 'XGBoost': xgb_model.predict_proba(input_df)[0][1]
@@ -164,5 +166,9 @@ if selected_customer_option:
     age_group_elderly = bool(selected_customer['AgeGroup_Elderly'].iloc[0])
 
     input_df, input_dict = prepare_input(credit_score, location, gender, age, tenure, balance, num_products, has_credit_card, is_active_member, estimated_salary, clv, tenure_age_ratio, age_group_middle_age, age_group_senior, age_group_elderly)
-    
-    make_predictions(input_df, input_dict)
+
+    exited = bool(selected_customer['Exited'].iloc[0])
+
+    avg_probability = make_predictions(input_df, input_dict)
+
+    st.write(f"**Exited:** {'True' if exited else 'False'}")
