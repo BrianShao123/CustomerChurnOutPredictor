@@ -19,7 +19,8 @@ smote_xgb_model = load_model('smote_xgb_model.pkl')
 svm_model = load_model('svm_model.pkl')
 voting_clf = load_model('voting_clf.pkl')
 xgb_model = load_model('xgb_model.pkl')
-
+SMOTE_rf_model = load_model('SMOTE_feat_rf_mode.pkl')
+SMOTE_feat_svm_model = load_model('SMOTE_feat_svm_model.pkl')
 def prepare_input(credit_score, location, gender, age, tenure, balance, 
                   num_products, has_credit_card, is_active_member, estimated_salary, clv, tenure_age_ratio, age_group_middle_age, age_group_senior, age_group_elderly):
     input_dict = {
@@ -55,7 +56,9 @@ def make_predictions(input_df, input_dict):
         # 'LightGBM': lgb_model.predict_proba(input_df)[0][1],
         # 'Naive Bayes': nb_model.predict_proba(input_df)[0][1],
         # 'Random Forest': rf_model.predict_proba(input_df)[0][1],
-        # 'SMOTE XGBoost': smote_xgb_model.predict_proba(input_df)[0][1],
+        'SMOTE XGBoost': smote_xgb_model.predict_proba(input_df)[0][1],
+        'SMOTE RF': SMOTE_rf_model.predict_proba(input_df)[0][1],
+        'SMOTE SVM': SMOTE_feat_svm_model.predict_proba(input_df)[0][1],
         # 'SVM': svm_model.predict_proba(input_df)[0][1],
         # 'Voting Classifier': voting_clf.predict_proba(input_df)[0][1],
         # 'XGBoost': xgb_model.predict_proba(input_df)[0][1]
